@@ -1,0 +1,5 @@
+Anomaly_train.rar (application/x-rar-compressed) 666594169 bytes.
+Anomaly_test.rar (application/x-rar-compressed) 57307813 bytes.
+Inpainting_train.rar (application/x-rar-compressed) 76171335 bytes.
+readme.txt (text/plain) 2247 bytes.
+Inpainting_test.rar (application/x-rar-compressed) 29813335 bytes.
