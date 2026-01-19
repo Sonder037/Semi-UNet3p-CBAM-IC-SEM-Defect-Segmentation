@@ -1,0 +1,41 @@
+# Default configuration for Semi-UNet3+-CBAM model
+
+data:
+  # Dataset configuration
+  dataset_path: "./datasets"
+  train_folder: "Anomaly_train"
+  test_folder: "Anomaly_test"
+  mask_folder: "abnormal_mask"
+  image_size: [512, 512]  # [height, width]
+  batch_size: 8
+  num_workers: 4
+  
+model:
+  # Model configuration
+  n_channels: 3
+  n_classes: 1
+  feature_scale: 1
+  dropout: 0.5
+  
+training:
+  # Training configuration
+  epochs: 100
+  learning_rate: 0.0001
+  weight_decay: 0.00001
+  patience: 10  # For learning rate scheduler
+  min_lr: 1.0e-7
+  save_dir: "./checkpoints"
+  log_dir: "./logs"
+  
+validation:
+  # Validation configuration
+  val_interval: 1  # Validate every N epochs
+  metrics: ["iou", "dice", "accuracy"]
+  
+augmentation:
+  # Data augmentation configuration
+  horizontal_flip: true
+  vertical_flip: true
+  rotate: true
+  color_jitter: false
+  gaussian_noise: false

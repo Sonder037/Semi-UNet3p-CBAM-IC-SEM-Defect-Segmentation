@@ -17,6 +17,78 @@
 3. 在降低标注成本的同时，提升微小缺陷区域的表征和定位能力
 4. 验证所提方法在IC SEM图像缺陷分割场景中的有效性和优势
 
+## 项目结构
+
+```
+Semi-UNet3+-CBAM-IC-SEM-Defect-Segmentation/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── setup.py
+├── src/                      # 源代码目录
+│   ├── data/                 # 数据处理相关代码
+│   │   └── data_loader.py    # 数据加载器
+│   ├── models/               # 模型定义
+│   │   ├── __init__.py
+│   │   └── unet3p_cbam.py    # Semi-UNet3+-CBAM模型定义
+│   ├── utils/                # 工具函数
+│   │   └── utils.py          # 评估指标等工具函数
+│   ├── configs/              # 配置文件
+│   │   └── default_config.yaml # 默认配置
+│   └── cli/                  # 命令行接口
+│       ├── train.py          # 训练脚本
+│       ├── run_training.py   # 启动训练的入口脚本
+│       ├── preprocess_data.py # 数据预处理脚本
+│       └── split_dataset.py  # 数据集划分脚本
+├── datasets/                 # 数据集目录
+│   ├── Anomaly_train/        # 异常检测训练集
+│   ├── Anomaly_test/         # 异常检测测试集
+│   │   ├── abnormal_bbox/    # 异常边界框标注
+│   │   ├── abnormal_mask/    # 异常像素级掩码
+│   │   └── normal_img/       # 正常图像
+│   ├── Inpainting_train/     # 图像修复训练集
+│   └── Inpainting_test/      # 图像修复测试集
+└── checkpoints/              # 模型检查点（训练时生成）
+```
+
+## 环境配置
+
+1. 克隆项目：
+```bash
+git clone <repository-url>
+cd Semi-UNet3+-CBAM-IC-SEM-Defect-Segmentation
+```
+
+2. 创建虚拟环境并安装依赖：
+```bash
+conda create -n semi_unet python=3.8
+conda activate semi_unet
+pip install -r requirements.txt
+# 或者使用setup.py安装
+pip install -e .
+```
+
+## 使用方法
+
+### 训练模型
+```bash
+python -m src.cli.run_training --config src/configs/default_config.yaml --device cuda
+```
+
+或者直接运行训练脚本：
+```bash
+python -m src.cli.train --config src/configs/default_config.yaml
+```
+
+### 使用命令行工具（如果已安装包）
+```bash
+# 训练模型
+semi-unet3p-train --config src/configs/default_config.yaml
+
+# 预处理数据
+semi-unet3p-preprocess --data-dir ./datasets --output-dir ./preprocessed_data
+```
+
 ## 技术方案
 
 ### 网络架构
@@ -49,3 +121,31 @@
 - 高分辨率SEM图像
 - 像素级缺陷标注
 - 规则纹理背景中的多种缺陷类型
+
+数据集结构：
+- Anomaly_train: 包含25,160张正常图像和116张异常图像
+- Anomaly_test: 包含1,272张正常图像和116张异常图像
+- Inpainting_train: 1,312对合成异常图像及其对应正常图像
+- Inpainting_test: 135对合成异常图像及其对应正常图像
+
+## 评估指标
+
+- IoU (Intersection over Union)
+- Dice系数
+- Pixel Accuracy
+- Precision, Recall, F1 Score
+
+## 未来工作
+
+1. 扩展数据集规模，提高模型泛化能力
+2. 优化网络结构，减少计算复杂度
+3. 添加更多半监督学习策略
+4. 集成模型压缩技术以适应边缘部署
+
+## 许可证
+
+本项目采用MIT许可证 - 详情请参阅[LICENSE](LICENSE)文件
+
+## 参考文献
+
+L. Huang, D. Cheng, X. Yang, T. Lin, Y. Shi, K. Yang, B.-H. Gwee, B. Wen, "Joint Anomaly Detection and Inpainting for Microscopy Images via Deep Self-Supervised Learning," in Proc. IEEE Int. Conf. Image Processing (ICIP), 2021.
